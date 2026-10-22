@@ -25,7 +25,7 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     public void add(T value, int index) {
         if (index == size) {
             add(value);
-        } else if (index == 0) {
+        } else if (index == 0 && first != null) {
             Node<T> newNode = new Node<>(null, value, null);
             newNode.prev = null;
             newNode.next = first;
@@ -102,26 +102,20 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     }
 
     private Node<T> findNodeByIndex(int index) {
-        if (index == 0) {
-            return first;
-        }
-        int counter = 0;
-        if (index < size / 2) {
-            Node<T> currentNode = first;
-            while (index > counter) {
-                currentNode = currentNode.next;
-                counter++;
+        checkIndex(index);
+        Node<T> current;
+        if (index < (size >> 1)) {
+            current = first;
+            for (int i = 0; i < index; i++) {
+                current = current.next;
             }
-            return currentNode;
         } else {
-            int reverseIterations = (size - 1) - index;
-            Node<T> currentNode = last;
-            while (reverseIterations > counter) {
-                currentNode = currentNode.prev;
-                counter++;
+            current = last;
+            for (int i = size - 1; i > index; i--) {
+                current = current.prev;
             }
-            return currentNode;
         }
+        return current;
     }
 
     private void checkIndex(int index) {
